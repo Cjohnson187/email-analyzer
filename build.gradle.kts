@@ -18,9 +18,15 @@ dependencies {
     // Spring Boot dependencies for a console application
     implementation ("org.springframework.boot:spring-boot-starter")
 
-    // Apache Commons Email for MBOX file parsing
-    implementation ("org.apache.commons:commons-email:1.5")
-    implementation ("jakarta.mail:jakarta.mail-api:2.1.3")
+    // Jakarta Mail Implementation: Needed for the InternetAddress class used in the EmailSorter code.
+    // Using the official implementation to ensure runtime classes are available.
+    implementation("com.sun.mail:jakarta.mail:2.1.3")
+
+    // Mime4j for robust MBOX and message parsing (aligned to 0.8.10 for consistency)
+    // These replace the need for the full JavaMail Session.
+    implementation("org.apache.james:apache-mime4j-dom:0.8.10")
+    implementation("org.apache.james:apache-mime4j-core:0.8.10")
+    implementation("org.apache.james:apache-mime4j-mbox-iterator:0.8.10")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
@@ -37,7 +43,7 @@ tasks.register<JavaExec>("emailanalyzer") {
     description = "Runs the main Java application"
 
     classpath = sourceSets["main"].runtimeClasspath
-    mainClass.set("org.tools.example.Main") // Replace with your actual main class
+    mainClass.set("org.tools.EmailSorter") // Set to the correct main class
     // If your application requires arguments, uncomment and configure:
     // args("arg1", "arg2")
     // If your application requires JVM arguments, uncomment and configure:
